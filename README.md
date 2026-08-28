@@ -143,6 +143,10 @@ php artisan optimize:clear
 
 The reset email is delivered synchronously during local development because no queue worker is required for the recovery flow.
 
+## Local Image Assets
+
+The homepage uses locally stored photography in `public/images/destinations/` for the hero and rotating Popular destinations section, plus `public/images/agencies/` for professional agency-card imagery. These images were downloaded from Pexels and should remain alongside their source/license records if the asset set is expanded.
+
 ## Safe Next Steps
 
 Authentication is the current completed checkpoint. The next planned feature is the agency management area, starting with a proper product decision and then implementation:

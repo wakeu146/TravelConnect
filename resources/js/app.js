@@ -1,5 +1,6 @@
 document.querySelectorAll('[data-carousel]').forEach((carousel) => {
 	const track = carousel.querySelector('[data-carousel-track]');
+	if (!track) return;
 	const slides = Array.from(track.children);
 	const next = carousel.querySelector('[data-carousel-next]');
 	const previous = carousel.querySelector('[data-carousel-prev]');
@@ -13,7 +14,7 @@ document.querySelectorAll('[data-carousel]').forEach((carousel) => {
 	const render = () => {
 		current = Math.min(current, maxIndex());
 		track.style.transform = `translateX(-${current * (100 / visibleSlides())}%)`;
-		dots.querySelectorAll('button').forEach((dot, index) => {
+		dots?.querySelectorAll('button').forEach((dot, index) => {
 			dot.classList.toggle('bg-[#e76f51]', index === current);
 			dot.classList.toggle('bg-[#cbd9d8]', index !== current);
 			dot.setAttribute('aria-current', index === current ? 'true' : 'false');
@@ -28,6 +29,7 @@ document.querySelectorAll('[data-carousel]').forEach((carousel) => {
 	};
 
 	for (let index = 0; index <= maxIndex(); index += 1) {
+		if (!dots) break;
 		const dot = document.createElement('button');
 		dot.type = 'button';
 		dot.className = 'h-2 w-2 rounded-full transition';
@@ -39,8 +41,8 @@ document.querySelectorAll('[data-carousel]').forEach((carousel) => {
 	const start = () => { timer = window.setInterval(() => move(1), 5000); };
 	const stop = () => window.clearInterval(timer);
 
-	next.addEventListener('click', () => move(1));
-	previous.addEventListener('click', () => move(-1));
+	next?.addEventListener('click', () => move(1));
+	previous?.addEventListener('click', () => move(-1));
 	carousel.addEventListener('mouseenter', stop);
 	carousel.addEventListener('mouseleave', start);
 	carousel.addEventListener('focusin', stop);
@@ -115,5 +117,39 @@ document.querySelectorAll('[data-rating]').forEach((ratingButton) => {
 		const message = ratingButton.closest('section').querySelector('[data-rating-message]');
 		message.textContent = `${rating} star${rating === 1 ? '' : 's'} selected. Sign in to publish your rating and comment.`;
 	});
+});
+
+document.querySelectorAll('[data-destination-carousel]').forEach((carousel) => {
+	const track = carousel.querySelector('[data-destination-track]');
+	const slides = Array.from(track.children);
+	const next = carousel.querySelector('[data-destination-next]');
+	const previous = carousel.querySelector('[data-destination-prev]');
+	let current = 0;
+	let timer;
+
+	const visibleSlides = () => window.innerWidth >= 1024 ? 3 : window.innerWidth >= 640 ? 2 : 1;
+	const maxIndex = () => Math.max(0, slides.length - visibleSlides());
+	const render = () => {
+		current = Math.min(current, maxIndex());
+		track.style.transform = `translateX(-${current * (100 / visibleSlides())}%)`;
+	};
+	const move = (direction) => {
+		current = current + direction;
+		if (current > maxIndex()) current = 0;
+		if (current < 0) current = maxIndex();
+		render();
+	};
+	const start = () => { timer = window.setInterval(() => move(1), 4500); };
+	const stop = () => window.clearInterval(timer);
+
+	next?.addEventListener('click', () => move(1));
+	previous?.addEventListener('click', () => move(-1));
+	carousel.addEventListener('mouseenter', stop);
+	carousel.addEventListener('mouseleave', start);
+	carousel.addEventListener('focusin', stop);
+	carousel.addEventListener('focusout', start);
+	window.addEventListener('resize', render);
+	render();
+	start();
 });
 
