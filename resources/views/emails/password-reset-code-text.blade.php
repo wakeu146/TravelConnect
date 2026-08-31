@@ -1,17 +1,17 @@
-TravelConnect
+{{ __('messages.travelconnect') }}
 
-Your security code
+{{ __('messages.your_security_code_text') }}
 
-Hello {{ $name }},
+{{ __('messages.hello_name', ['name' => $name]) }}
 
-We received a request to reset your TravelConnect password. Enter this code to continue:
+{{ __('messages.security_code_message') }}
 
 {{ $code }}
 
-This code expires in {{ $expiration }} minutes. Never share it with anyone.
-After verification, you will create a new password.
+{{ __('messages.code_expires_in_minutes', ['minutes' => $expiration]) }}
+{{ __('messages.after_verification') }}
 
-If you did not request a password reset, you can safely ignore this email.
+{{ __('messages.if_you_did_not_request') }}
 
-The TravelConnect team
-This is an automated message. Please do not reply.
+{{ __('messages.travelconnect_team') }}
+{{ __('messages.automated_message') }}

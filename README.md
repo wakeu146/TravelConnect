@@ -1,175 +1,90 @@
 # TravelConnect
 
-TravelConnect is a Laravel travel-agency marketplace. Travelers discover trusted agencies, compare expertise, save agencies, send inquiries, and write reviews. Agency owners manage their profiles and verification documents. Administrators will review agencies, documents, and reviews.
+TravelConnect is a Laravel travel marketplace for travelers and agencies. The app is designed to connect travelers with trusted agencies, help agencies present their expertise, and make the inquiry flow feel simple and professional.
 
-## Current Status
+## What was completed in this phase
 
-Authentication and the first public product surfaces are implemented. We paused immediately after completing and testing authentication, before continuing with the agency management dashboard.
+This branch focuses on the public experience and multilingual UX, especially the language switch and mobile navigation behavior.
 
-Completed authentication:
+### Completed work
 
-- Traveler and agency-owner registration
-- Login with remember-me support
-- Logout and protected dashboard access
-- Six-digit password-recovery verification code sent by email
-- Ten-minute code expiry and five-attempt limit
-- Hashed recovery-code storage in `password_reset_codes`
-- New-password creation and redirect back to login
-- SMTP delivery through Gmail
-- Professional HTML and plain-text password-recovery email templates
-- Friendly SMTP error handling instead of exposing a raw exception page
+- Implemented locale-aware language switching for English and French
+- Preserved selected language while navigating across public pages and auth pages
+- Fixed the mobile language selector so it updates correctly on the first click
+- Prevented the language selector from being rewritten by the generic locale helper
+- Fixed the page loader to behave like a real browser-load indicator instead of a forced visual delay
+- Unified the locale handling across shared public/auth layouts
+- Reviewed and translated remaining public-facing English copy into the French language files
+- Kept the functionality scoped to the front-end/localization flow without disturbing the rest of the app structure
 
-The dashboard shown after login is intentionally the original simple authenticated dashboard. A dynamic agency management dashboard was prototyped and then removed at the user's request. We ended with authentication as the stable checkpoint.
+### Main files touched
 
-## Stack
+- `app/Http/Middleware/SetLocale.php`
+- `bootstrap/app.php`
+- `resources/js/app.js`
+- `resources/views/components/site-header.blade.php`
+- `resources/views/components/public-layout.blade.php`
+- `resources/views/components/auth-layout.blade.php`
+- `resources/views/welcome.blade.php`
+- `lang/en/messages.php`
+- `lang/fr/messages.php`
 
-- Laravel 13
-- PHP 8.3+
-- MySQL/MariaDB
-- Blade components
-- Tailwind CSS v4
+## Localization notes
+
+The app uses Laravel localization with a session-aware locale middleware and URL query handling.
+
+Behavior:
+
+- `?lang=en` and `?lang=fr` are accepted as valid locale overrides
+- the selected locale is stored in the session
+- navigation links preserve the active locale
+- auth and public pages keep the same selected language when moving through the app
+
+## Mobile behavior
+
+The mobile menu and language switch were handled separately from the desktop header logic to avoid the double-trigger issue. The mobile language buttons now behave like real link navigation instead of being overwritten by the generic locale rewrite logic.
+
+## Loader behavior
+
+The loader is only intended to appear when the browser is actively loading or navigating. It is not supposed to stay visible after the page is already ready.
+
+## Tech stack
+
+- Laravel
+- PHP
+- Blade templates
+- Tailwind CSS
 - Vite
-- Vanilla JavaScript for small interactions
+- JavaScript for small UI interactions
 
-## Run Locally
-
-1. Make sure WAMP MySQL or MariaDB is running on port `3306`.
-2. Confirm `.env` contains the correct database values.
-3. Start Laravel:
+## Local setup
 
 ```powershell
 php artisan serve --host=127.0.0.1 --port=8000
-```
-
-4. Build frontend assets after frontend changes:
-
-```powershell
 npm run build
 ```
 
-5. Open `http://127.0.0.1:8000/`.
+Then open:
 
-Useful checks:
+```text
+http://127.0.0.1:8000/
+```
+
+## Verification
+
+The current regression check passed successfully:
 
 ```powershell
-php artisan view:cache
-php artisan route:list
-php artisan migrate:status
+php artisan test --stop-on-failure
 ```
 
-## Public Routes
+## Notes for teammates
 
-- `/` - homepage
-- `/discover` - agency directory prototype
-- `/how-it-works` - traveler workflow explanation
-- `/for-agencies` - agency partner page
-- `/login` - login
-- `/register` - account-type selection
-- `/register/agency` - agency-owner registration
-- `/register/traveler` - traveler registration
-- `/forgot-password` - request a six-digit recovery code
-- `/verify-reset-code` - verify the recovery code
-- `/reset-password` - set a new password after verification
-- `/dashboard` - authenticated dashboard
+- If you change the language flow, test both desktop and mobile views.
+- Do not rewrite the language buttons with generic locale helper logic.
+- Keep the locale helper isolated to non-selector links.
+- The loader should remain tied to actual browser lifecycle events only.
 
-Routes are defined in `routes/web.php`.
+## Recent commit summary
 
-## Frontend Structure
-
-Shared Blade components are in `resources/views/components/`:
-
-- `public-layout.blade.php` - shared public HTML shell
-- `auth-layout.blade.php` - authentication page shell with page loader
-- `site-header.blade.php` - responsive header, logo, desktop links, and mobile drawer
-- `site-footer.blade.php` - shared footer with navigation, contact, newsletter, and legal links
-- `agency-card.blade.php` - reusable agency card
-- `agency-benefit.blade.php` - reusable agency benefit block
-
-Pages are in `resources/views/` and use the shared components. Do not copy the header or footer into a new page. Use the components instead.
-
-The logo is stored at `public/images/logo.png` and should be referenced with:
-
-```blade
-{{ asset('images/logo.png') }}
-```
-
-JavaScript lives in `resources/js/app.js`. It currently controls the agency carousel and mobile menu. Keep interactions small and page-safe; check that a queried element exists when adding behavior to optional components.
-
-## Domain Model
-
-Important models are in `app/Models/`:
-
-- `User`: traveler, agency owner, or admin
-- `Agency`: company details, verification status, and trust score
-- `Country` and `Service`: agency categories
-- `Favorite`: saved agency relationship
-- `Inquiry`: traveler message to an agency
-- `Review`: rating and moderated comment
-- `AgencyDocument`: verification uploads
-- `TrustScoreLog`: trust score history
-
-Enums are in `app/Enums/`:
-
-- `UserRole`: `traveler`, `agency_owner`, `admin`
-- `VerificationStatus`: `pending`, `verified`, `rejected`
-- `DocumentStatus`: `pending`, `approved`, `rejected`
-- `InquiryStatus`: `open`, `responded`, `closed`
-- `ReviewStatus`: `pending`, `published`, `flagged`
-
-The database is seeded with sample countries, services, users, verified agencies, reviews, inquiries, documents, favorites, and trust-score logs.
-
-Password recovery also uses the `password_reset_codes` table. The code is hashed, expires after ten minutes, and is deleted after successful verification.
-
-## SMTP Configuration
-
-SMTP is configured through `.env` and the credentials must never be committed or added to documentation. The local setup uses Gmail SMTP:
-
-```env
-MAIL_MAILER=smtp
-MAIL_SCHEME=null
-MAIL_HOST=smtp.gmail.com
-MAIL_PORT=587
-MAIL_USERNAME=your-sender@gmail.com
-MAIL_PASSWORD=your-gmail-app-password
-MAIL_FROM_ADDRESS="your-sender@gmail.com"
-MAIL_FROM_NAME="TravelConnect"
-```
-
-Use a Gmail App Password, not the normal Gmail password. After changing mail settings, clear the Laravel configuration cache:
-
-```powershell
-php artisan optimize:clear
-```
-
-The reset email is delivered synchronously during local development because no queue worker is required for the recovery flow.
-
-## Local Image Assets
-
-The homepage uses locally stored photography in `public/images/destinations/` for the hero and rotating Popular destinations section, plus `public/images/agencies/` for professional agency-card imagery. These images were downloaded from Pexels and should remain alongside their source/license records if the asset set is expanded.
-
-## Safe Next Steps
-
-Authentication is the current completed checkpoint. The next planned feature is the agency management area, starting with a proper product decision and then implementation:
-
-1. Design the agency-owner navigation and information architecture.
-2. Create an agency profile during agency registration.
-3. Build a real agency profile editor.
-4. Add owner-scoped inquiry management.
-5. Add verification document management.
-6. Add analytics based on real database activity.
-7. Add feature tests for every management action.
-
-The earlier dashboard prototype was removed. Do not reintroduce its controller, sidebar, management views, or routes without confirming the design and scope first.
-
-Do not add booking, payments, live chat, or itinerary management without extending the domain model first. The current inquiry model stores one subject and one message; it does not yet support threaded conversations.
-
-## Important Notes for Future AI Agents
-
-- Read this README and `AGENTS.md` before changing code.
-- Preserve the existing white, navy, teal, and coral visual language.
-- Keep pages responsive from mobile through desktop.
-- Use shared components for repeated structure.
-- Keep form field names and database contracts stable when improving UI.
-- Run `php artisan view:cache`, `npm run build`, and a live route check after frontend changes.
-- Run `php artisan test` after authentication or database changes.
-- Do not commit changes unless explicitly requested.
+This work completes the front-end localization pass and stabilizes the language switching experience across devices.
