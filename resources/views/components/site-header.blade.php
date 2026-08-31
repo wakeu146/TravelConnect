@@ -47,7 +47,7 @@
                 class="group relative flex items-center gap-2 py-2 transition hover:text-[#e76f51]
                 {{ request()->routeIs('home') ? 'text-[#e76f51]' : '' }}">
 
-                <span>Home</span>
+                <span>{{ __('navigation.home') }}</span>
 
                 <span
                     class="absolute inset-x-0 bottom-0 h-0.5 origin-left bg-[#e76f51] transition-transform
@@ -65,7 +65,7 @@
                     ? 'text-[#e76f51]'
                     : '' }}">
 
-                <span>Agencies</span>
+                <span>{{ __('navigation.agencies') }}</span>
 
                 <span
                     class="absolute inset-x-0 bottom-0 h-0.5 origin-left bg-[#e76f51] transition-transform
@@ -83,7 +83,7 @@
                     type="button"
                     class="flex items-center gap-2 py-2 transition hover:text-[#e76f51]">
 
-                    <span>About</span>
+                    <span>{{ __('navigation.about') }}</span>
 
                     <i
                         class="fa-solid fa-chevron-down text-[9px] transition-transform duration-200 group-hover:rotate-180"
@@ -102,7 +102,7 @@
                             <i class="fa-regular fa-circle-question text-sm"></i>
                         </span>-->
 
-                        How it works
+                        <span>{{ __('navigation.how_it_works') }}</span>
                     </a>
 
                     <a href="{{ route('for-agencies') }}"
@@ -113,7 +113,7 @@
                             <i class="fa-solid fa-building text-sm"></i>
                         </span>-->
 
-                        For agencies
+                        <span>{{ __('navigation.for_agencies') }}</span>
                     </a>
                 </div>
             </div>
@@ -126,7 +126,7 @@
                     type="button"
                     class="flex items-center gap-2 py-2 transition hover:text-[#e76f51]">
 
-                    <span>Contact</span>
+                    <span>{{ __('navigation.contact') }}</span>
 
                     <i
                         class="fa-solid fa-chevron-down text-[9px] transition-transform duration-200 group-hover:rotate-180"
@@ -145,7 +145,7 @@
                             <i class="fa-regular fa-envelope text-sm"></i>
                         </span>-->
 
-                        Email us
+                        <span>{{ __('navigation.email_us') }}</span>
                     </a>
 
                     <a href="{{ route('for-agencies') }}#resources"
@@ -156,7 +156,7 @@
                             <i class="fa-solid fa-book-open text-sm"></i>
                         </span>-->
 
-                        Agency resources
+                        <span>{{ __('navigation.agency_resources') }}</span>
                     </a>
                 </div>
             </div>
@@ -178,6 +178,9 @@
                     href="{{ request()->fullUrlWithQuery(['lang' => 'en']) }}"
                     aria-label="English"
                     title="English"
+                    data-lang-button
+                    data-lang="en"
+                    data-translate-lang="en"
                     class="flex h-8 w-9 items-center justify-center rounded-lg transition
                     {{ request('lang', 'en') === 'en'
                         ? 'bg-[#173042] shadow-sm'
@@ -190,6 +193,9 @@
                     href="{{ request()->fullUrlWithQuery(['lang' => 'fr']) }}"
                     aria-label="Français"
                     title="Français"
+                    data-lang-button
+                    data-lang="fr"
+                    data-translate-lang="fr"
                     class="flex h-8 w-9 items-center justify-center rounded-lg transition
                     {{ request('lang') === 'fr'
                         ? 'bg-[#173042] shadow-sm'
@@ -198,23 +204,24 @@
                     <span class="fi fi-fr rounded-sm"></span>
                 </a>
 
+                <div id="google_translate_element" class="hidden"></div>
             </div>
 
 
             {{-- LOGIN --}}
             <a
-                href="{{ route('login') }}"
+                href="{{ route('login', ['lang' => app()->getLocale()]) }}"
                 data-loading-link
                 class="hidden px-3 py-2 text-sm font-medium text-[#607985] transition hover:text-[#173042] sm:block">
-                Log in
+                {{ __('navigation.login') }}
             </a>
 
 
             {{-- REGISTER --}}
             <a
-                href="{{ route('register') }}"
+                href="{{ route('register', ['lang' => app()->getLocale()]) }}"
                 class="hidden rounded-full bg-[#173042] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#26495d] sm:inline-flex">
-                Create account
+                <span>{{ __('navigation.create_account') }}</span>
             </a>
 
 
@@ -226,7 +233,7 @@
                 aria-controls="mobile-menu"
                 class="group flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#dbe3e5] bg-white text-[#173042] shadow-sm transition hover:border-[#173042] hover:bg-[#f8faf9] sm:h-10 sm:w-10 md:hidden">
 
-                <span class="sr-only">Open navigation</span>
+<span class="sr-only">{{ __('navigation.open_navigation') }}</span>
 
                 <i
                     class="fa-solid fa-bars text-sm transition-transform duration-200 group-hover:scale-110 sm:text-base"
@@ -308,7 +315,7 @@
                 {{-- NAVIGATION LABEL --}}
                 <div class="mb-2 px-2.5">
                     <p class="text-[9px] font-bold uppercase tracking-[0.18em] text-[#9aabad]">
-                        Navigation
+                        {{ __('navigation.navigation') }}
                     </p>
                 </div>
 
@@ -335,7 +342,7 @@
                         </span>
 
                         <span class="flex-1 text-[13px] font-semibold">
-                            Home
+                            {{ __('navigation.home') }}
                         </span>
 
                         @if (request()->routeIs('home'))
@@ -363,7 +370,7 @@
                         </span>
 
                         <span class="flex-1 text-[13px] font-semibold">
-                            Agency directory
+                            {{ __('navigation.agency_directory') }}
                         </span>
 
                         @if (request()->routeIs('discover') || request()->routeIs('agency.show'))
@@ -387,7 +394,7 @@
                             </span>
 
                             <span class="flex-1 text-[13px] font-semibold">
-                                About
+                                {{ __('navigation.about') }}
                             </span>
 
                             <i
@@ -406,7 +413,7 @@
 
                                 <i class="fa-regular fa-circle-question w-3 text-center"></i>
 
-                                <span>How it works</span>
+                                <span>{{ __('navigation.how_it_works') }}</span>
 
                             </a>
 
@@ -416,7 +423,7 @@
 
                                 <i class="fa-solid fa-building w-3 text-center"></i>
 
-                                <span>For agencies</span>
+                                <span>{{ __('navigation.for_agencies') }}</span>
 
                             </a>
 
@@ -439,7 +446,7 @@
                             </span>
 
                             <span class="flex-1 text-[13px] font-semibold">
-                                Contact
+                                {{ __('navigation.contact') }}
                             </span>
 
                             <i
@@ -458,7 +465,7 @@
 
                                 <i class="fa-regular fa-envelope w-3 text-center"></i>
 
-                                <span>Email us</span>
+                                <span>{{ __('navigation.email_us') }}</span>
 
                             </a>
 
@@ -468,7 +475,7 @@
 
                                 <i class="fa-solid fa-book-open w-3 text-center"></i>
 
-                                <span>Agency resources</span>
+                                <span>{{ __('navigation.agency_resources') }}</span>
 
                             </a>
 
@@ -486,12 +493,12 @@
 
                     <div class="mb-2 px-2.5">
                         <p class="text-[9px] font-bold uppercase tracking-[0.18em] text-[#9aabad]">
-                            Account
+                            {{ __('navigation.account') }}
                         </p>
                     </div>
 
                     <a
-                        href="{{ route('login') }}"
+                        href="{{ route('login', ['lang' => app()->getLocale()]) }}"
                         data-loading-link
                         class="group flex items-center gap-2.5 rounded-lg px-2.5 py-2.5 text-[#526b76] transition hover:bg-[#f7f9f8] hover:text-[#173042]">
 
@@ -503,7 +510,7 @@
                         </span>
 
                         <span class="text-[13px] font-semibold">
-                            Log in
+                            {{ __('navigation.login') }}
                         </span>
 
                     </a>
@@ -518,7 +525,7 @@
 
                     <div class="mb-2 px-2.5">
                         <p class="text-[9px] font-bold uppercase tracking-[0.18em] text-[#9aabad]">
-                            Language
+                            {{ __('navigation.language') }}
                         </p>
                     </div>
 
@@ -535,7 +542,7 @@
                             <span class="fi fi-gb rounded-sm"></span>
 
                             <span class="text-xs font-semibold">
-                                English
+                                {{ __('navigation.english') }}
                             </span>
 
                         </a>
@@ -551,7 +558,7 @@
                             <span class="fi fi-fr rounded-sm"></span>
 
                             <span class="text-xs font-semibold">
-                                Français
+                                {{ __('navigation.french') }}
                             </span>
 
                         </a>
@@ -581,11 +588,11 @@
                     <div>
 
                         <p class="text-xs font-bold text-[#173042]">
-                            Are you an agency?
+                            {{ __('navigation.are_you_an_agency') }}
                         </p>
 
                         <p class="mt-0.5 text-[10px] text-[#8a9ba0]">
-                            Join TravelConnect
+                            {{ __('navigation.join_travelconnect') }}
                         </p>
 
                     </div>
@@ -594,10 +601,10 @@
 
 
                 <a
-                    href="{{ route('register') }}"
+                    href="{{ route('register', ['lang' => app()->getLocale()]) }}"
                     class="flex w-full items-center justify-center gap-2 rounded-lg bg-[#e76f51] px-3 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-[#d95f42] hover:shadow-md">
 
-                    <span>Register your agency</span>
+                    <span>{{ __('navigation.register_your_agency') }}</span>
 
                     <i class="fa-solid fa-arrow-right text-[10px]"></i>
 

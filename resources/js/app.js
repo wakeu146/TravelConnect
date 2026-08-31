@@ -52,6 +52,63 @@ document.querySelectorAll('[data-carousel]').forEach((carousel) => {
 	start();
 });
 
+const getCurrentLocale = () => {
+	const searchLocale = new URLSearchParams(window.location.search).get('lang');
+	const htmlLocale = (document.documentElement.lang || '').split('-')[0];
+	if (searchLocale && ['en', 'fr'].includes(searchLocale)) return searchLocale;
+	if (htmlLocale && ['en', 'fr'].includes(htmlLocale)) return htmlLocale;
+	return 'en';
+};
+
+const preserveLocaleOnUrl = (urlValue) => {
+	const locale = getCurrentLocale();
+	if (!['en', 'fr'].includes(locale)) return urlValue;
+	const nextUrl = new URL(urlValue, window.location.href);
+	if (nextUrl.origin === window.location.origin) {
+		nextUrl.searchParams.set('lang', locale);
+	}
+	return nextUrl.toString();
+};
+
+const applyLocaleToLinks = () => {
+	document.querySelectorAll('a[href]').forEach((link) => {
+		if (link.closest('[data-lang-button]')) return;
+		const href = link.getAttribute('href');
+		if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+		const absoluteHref = new URL(href, window.location.href);
+		if (absoluteHref.origin === window.location.origin) {
+			link.href = preserveLocaleOnUrl(link.href);
+		}
+	});
+};
+
+applyLocaleToLinks();
+document.addEventListener('DOMContentLoaded', applyLocaleToLinks);
+
+document.addEventListener('click', (event) => {
+	const link = event.target.closest('a[href]');
+	if (!link || link.closest('[data-lang-button]')) return;
+	const href = link.getAttribute('href');
+	if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+	const absoluteHref = new URL(href, window.location.href);
+	if (absoluteHref.origin === window.location.origin) {
+		link.href = preserveLocaleOnUrl(link.href);
+	}
+});
+
+document.querySelectorAll('form').forEach((form) => {
+	form.addEventListener('submit', () => {
+		const locale = getCurrentLocale();
+		if (!['en', 'fr'].includes(locale) || locale === 'en') return;
+		if (form.querySelector('input[name="lang"]')) return;
+		const hiddenLang = document.createElement('input');
+		hiddenLang.type = 'hidden';
+		hiddenLang.name = 'lang';
+		hiddenLang.value = locale;
+		form.appendChild(hiddenLang);
+	});
+});
+
 document.querySelectorAll('[data-menu-toggle]').forEach((toggle) => {
 	const menu = document.getElementById(toggle.getAttribute('aria-controls'));
 	const backdrop = document.querySelector('[data-mobile-backdrop]');
@@ -61,8 +118,13 @@ document.querySelectorAll('[data-menu-toggle]').forEach((toggle) => {
 	const setOpen = (isOpen) => {
 		toggle.setAttribute('aria-expanded', String(isOpen));
 		menu.classList.toggle('hidden', !isOpen);
+		menu.classList.toggle('translate-x-full', !isOpen);
+		menu.classList.toggle('translate-x-0', isOpen);
 		backdrop.classList.toggle('hidden', !isOpen);
-		icon.textContent = isOpen ? '×' : '☰';
+		backdrop.classList.toggle('opacity-0', !isOpen);
+		backdrop.classList.toggle('opacity-100', isOpen);
+		icon.classList.remove('fa-bars', 'fa-xmark');
+		icon.classList.add(isOpen ? 'fa-xmark' : 'fa-bars');
 		document.body.classList.toggle('overflow-hidden', isOpen);
 	};
 

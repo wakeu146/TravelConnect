@@ -1,16 +1,16 @@
-TravelConnect
+{{ __('messages.travelconnect') }}
 
-Reset your password
+{{ __('messages.reset_your_password_text') }}
 
-Hello {{ $name }},
+{{ __('messages.hello_name', ['name' => $name]) }}
 
-We received a request to reset the password for your TravelConnect account. Use this link to choose a new password:
+{{ __('messages.we_received_reset_request') }}
 
 {{ $resetUrl }}
 
-This secure link expires in {{ $expiration }} minutes. For your protection, do not forward this email.
+{{ __('messages.secure_link_expires_in_minutes', ['minutes' => $expiration]) }}
 
-If you did not request a password reset, no action is needed and your account remains secure.
+{{ __('messages.if_you_did_not_request_reset') }}
 
-The TravelConnect team
-This is an automated message. Please do not reply.
+{{ __('messages.travelconnect_team') }}
+{{ __('messages.automated_message') }}
