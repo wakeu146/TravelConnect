@@ -28,7 +28,7 @@
                         </span>
                         Travel<span class="font-normal text-[#e76f51]">Connect</span>
                     </a>
-                    <a href="{{ route('home', ['lang' => app()->getLocale()]) }}" class="text-sm font-semibold text-[#607985]">{{ __('navigation.home') }}</a>
+                    <a href="{{ route('home', ['lang' => app()->getLocale()]) }}" class="text-sm font-semibold text-[#607985]">{{ __('messages.home') }}</a>
                 </div>
 
                 <div>
@@ -101,7 +101,7 @@
 
                         <label class="flex items-start gap-3 text-sm leading-6 text-[#607985]">
                             <input type="checkbox" name="terms" required class="mt-1 h-4 w-4 rounded border-[#d7e0e1] accent-[#e76f51]">
-                            <span>{{ __('messages.i_agree_to_the') }} <a href="#" class="font-semibold text-[#e76f51] hover:text-[#b94d35]">{{ __('navigation.terms_of_use') }}</a> {{ __('messages.and') }} <a href="#" class="font-semibold text-[#e76f51] hover:text-[#b94d35]">{{ __('navigation.privacy_policy') }}</a>.</span>
+                            <span>{{ __('messages.i_agree_to_the') }} <a href="#" class="font-semibold text-[#e76f51] hover:text-[#b94d35]">{{ __('messages.terms_of_use') }}</a> {{ __('messages.and') }} <a href="#" class="font-semibold text-[#e76f51] hover:text-[#b94d35]">{{ __('messages.privacy_policy') }}</a>.</span>
                         </label>
 
                         <button type="submit" data-loading-submit class="flex items-center justify-center gap-2 rounded-xl bg-[#e76f51] px-5 py-3.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#d95f42]">

@@ -88,12 +88,23 @@ document.addEventListener('DOMContentLoaded', applyLocaleToLinks);
 document.addEventListener('click', (event) => {
 	const link = event.target.closest('a[href]');
 	if (!link || link.closest('[data-lang-button]')) return;
+	if (link.getAttribute('href') === '#saved' || link.getAttribute('href') === '#activity') {
+		event.preventDefault();
+		window.location.href = `/account/${link.getAttribute('href').slice(1)}?lang=${getCurrentLocale()}`;
+		return;
+	}
 	const href = link.getAttribute('href');
 	if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
 	const absoluteHref = new URL(href, window.location.href);
 	if (absoluteHref.origin === window.location.origin) {
 		link.href = preserveLocaleOnUrl(link.href);
 	}
+});
+
+document.querySelectorAll('[data-lang-button]').forEach((button) => {
+	button.addEventListener('click', (event) => {
+		event.stopPropagation();
+	});
 });
 
 document.querySelectorAll('form').forEach((form) => {
@@ -113,7 +124,7 @@ document.querySelectorAll('[data-menu-toggle]').forEach((toggle) => {
 	const menu = document.getElementById(toggle.getAttribute('aria-controls'));
 	const backdrop = document.querySelector('[data-mobile-backdrop]');
 	const close = menu.querySelector('[data-menu-close]');
-	const icon = toggle.querySelector('[aria-hidden="true"]');
+	const icon = toggle.querySelector('[data-menu-icon]');
 
 	const setOpen = (isOpen) => {
 		toggle.setAttribute('aria-expanded', String(isOpen));
@@ -123,8 +134,9 @@ document.querySelectorAll('[data-menu-toggle]').forEach((toggle) => {
 		backdrop.classList.toggle('hidden', !isOpen);
 		backdrop.classList.toggle('opacity-0', !isOpen);
 		backdrop.classList.toggle('opacity-100', isOpen);
-		icon.classList.remove('fa-bars', 'fa-xmark');
-		icon.classList.add(isOpen ? 'fa-xmark' : 'fa-bars');
+		icon.innerHTML = isOpen
+			? '<path d="m6 6 12 12M18 6 6 18"/> '
+			: '<path d="M4 6h16M4 12h16M4 18h16"/>';
 		document.body.classList.toggle('overflow-hidden', isOpen);
 	};
 
@@ -158,20 +170,41 @@ document.querySelectorAll('[data-password-toggle]').forEach((toggle) => {
 });
 
 document.querySelectorAll('[data-favorite-toggle]').forEach((toggle) => {
-	toggle.addEventListener('click', (event) => {
+	toggle.addEventListener('click', async (event) => {
 		event.preventDefault();
-		const isSaved = toggle.getAttribute('aria-pressed') === 'true';
-		toggle.setAttribute('aria-pressed', String(!isSaved));
-		toggle.classList.toggle('text-[#e76f51]', !isSaved);
-		const icon = toggle.querySelector('[data-favorite-icon]') || toggle;
-		const label = toggle.querySelector('[data-favorite-label]');
-		if (icon) icon.textContent = isSaved ? '♡' : '♥';
-		if (label) label.textContent = isSaved ? 'Save agency' : 'Agency saved';
+		if (toggle.dataset.authenticated !== 'true') {
+			window.location.href = toggle.dataset.loginUrl;
+			return;
+		}
+		if (toggle.disabled) return;
+		toggle.disabled = true;
+		try {
+			const response = await fetch(`/agencies/${toggle.dataset.agencySlug}/favorite`, {
+				method: 'POST',
+				headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '', Accept: 'application/json' },
+			});
+			if (!response.ok) throw new Error('Favorite request failed');
+			const { saved } = await response.json();
+			toggle.setAttribute('aria-pressed', String(saved));
+			toggle.classList.toggle('text-[#e76f51]', saved);
+			const icon = toggle.querySelector('[data-favorite-icon]') || toggle;
+			const label = toggle.querySelector('[data-favorite-label]');
+			if (icon) icon.textContent = saved ? '♥' : '♡';
+			if (label) label.textContent = saved ? 'Agency saved' : 'Save agency';
+		} catch (error) {
+			console.error(error);
+		} finally {
+			toggle.disabled = false;
+		}
 	});
 });
 
 document.querySelectorAll('[data-rating]').forEach((ratingButton) => {
 	ratingButton.addEventListener('click', () => {
+		if (!document.querySelector('[data-rating-section]') && !document.body.classList.contains('authenticated')) {
+			window.location.href = `/login?lang=${getCurrentLocale()}`;
+			return;
+		}
 		const rating = Number(ratingButton.dataset.rating);
 		ratingButton.parentElement.querySelectorAll('[data-rating]').forEach((button) => {
 			button.classList.toggle('text-[#e76f51]', Number(button.dataset.rating) <= rating);
