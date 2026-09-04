@@ -28,7 +28,7 @@
                         </span>
                         Travel<span class="font-normal text-[#e76f51]">Connect</span>
                     </a>
-                    <a href="{{ route('home', ['lang' => app()->getLocale()]) }}" class="text-sm font-semibold text-[#607985]">{{ __('navigation.home') }}</a>
+                    <a href="{{ route('home', ['lang' => app()->getLocale()]) }}" class="text-sm font-semibold text-[#607985]">{{ __('messages.home') }}</a>
                 </div>
 
                 <div class="border-b border-[#dbe3e5] pb-7">

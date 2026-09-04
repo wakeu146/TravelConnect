@@ -12,3 +12,418 @@
 input:not([type='checkbox']):not([type='radio']) {
     border-color: #173042;
 }
+
+.dashboard-panel {
+    border-width: 1px;
+}
+
+.dashboard-shell #activity .dashboard-panel,
+.dashboard-shell #activity > div {
+    min-width: 0;
+    overflow: hidden;
+}
+
+.dashboard-shell #activity p,
+.dashboard-shell #activity h3 {
+    overflow-wrap: anywhere;
+}
+
+.dashboard-shell #activity .truncate {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    white-space: normal;
+}
+
+.dashboard-shell #overview > section:last-child .dashboard-panel {
+    min-width: 0;
+    overflow: hidden;
+}
+
+.dashboard-shell #overview > section:last-child .dashboard-panel p {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow-wrap: anywhere;
+}
+
+.dashboard-shell [data-account-sidebar] > div.mt-auto:not([data-profile-menu]) {
+    order: 2;
+    margin-top: 0;
+    border-top: 0;
+    padding-top: 0;
+}
+
+.dashboard-shell [data-account-sidebar] > div.mt-auto:not([data-profile-menu]) > a {
+    display: none;
+}
+
+.dashboard-shell [data-profile-menu] {
+    order: 1;
+}
+
+.dashboard-shell [data-profile-trigger] > span:nth-child(2) > span:last-child,
+.dashboard-shell [data-profile-trigger] > svg {
+    display: none;
+}
+
+.dashboard-shell [data-profile-trigger],
+.dashboard-shell [data-account-main] header a[href*="settings"] {
+    pointer-events: none;
+    cursor: default;
+}
+
+.dashboard-shell [data-profile-trigger]:hover,
+.dashboard-shell [data-account-main] header a[href*="settings"]:hover {
+    background-color: transparent;
+}
+
+.dashboard-shell [data-profile-dropdown] {
+    display: none !important;
+}
+
+.dashboard-shell [data-lang-button] {
+    display: inline-flex;
+    position: relative;
+    z-index: 100;
+    pointer-events: auto !important;
+}
+
+.dashboard-shell [data-account-main] header div:has(> a[data-lang-button]) {
+    pointer-events: none;
+}
+
+.dashboard-shell [data-account-main] header form[action*="logout"] {
+    display: none;
+}
+
+[data-account-main] header form[action*="account/discover"] input {
+    border: 1px solid #cbd9d8;
+    background: #f7f8f6;
+    color: #173042;
+    box-shadow: 0 1px 2px rgb(23 48 66 / 4%);
+}
+
+[data-account-main] header form[action*="account/discover"] input:focus {
+    border-color: #e76f51;
+    box-shadow: 0 0 0 3px rgb(231 111 81 / 14%);
+}
+
+[data-account-main] header form[action*="account/discover"] {
+    transition: max-width 220ms ease;
+}
+
+[data-account-main] header form[action*="account/discover"]:focus-within {
+    max-width: 48rem;
+}
+
+.dashboard-dark [data-discover-hero] {
+    background: #173042;
+    border-color: #31515d;
+}
+
+.dashboard-dark [data-discover-search] {
+    border-color: #486873;
+    background: #173042;
+    box-shadow: none;
+}
+
+.dashboard-dark [data-discover-search] input {
+    border-color: #486873;
+    background: #102936;
+}
+
+.dashboard-dark [data-discover-page] article {
+    border-color: #31515d;
+    background: #173042;
+}
+
+.dashboard-dark [data-verified-badge] {
+    background: #f5f7f5;
+    color: #173042;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 18%);
+}
+
+.dashboard-dark [data-discover-page] section:last-child > div:last-child {
+    border-color: #486873;
+    background: transparent;
+}
+
+.dashboard-dark [data-account-main] header form[action*="account/discover"] input {
+    border-color: #486873;
+    background: #102936;
+    color: #f5f7f5;
+    box-shadow: none;
+}
+
+.dashboard-dark [data-account-main] header form[action*="account/discover"] input:focus {
+    border-color: #f29a83;
+    box-shadow: 0 0 0 3px rgb(242 154 131 / 18%);
+}
+
+[data-agency-show] #reviews > div:first-child > a {
+    display: none;
+}
+
+.dashboard-dark [data-agency-show] > section,
+.dashboard-dark [data-agency-show] > div {
+    border-color: #31515d;
+}
+
+.dashboard-dark [data-agency-show] > section:nth-last-child(3) {
+    background: #173042;
+}
+
+.dashboard-dark [data-agency-show] aside > div,
+.dashboard-dark [data-agency-show] [data-agency-review-form] {
+    background: #173042;
+    border-color: #31515d;
+    box-shadow: none;
+}
+
+.dashboard-dark [data-agency-show] textarea {
+    background: #102936;
+    border-color: #486873;
+    color: #f5f7f5;
+}
+
+.dashboard-dark [data-agency-show] [class~="bg-white"] {
+    background-color: #31515d;
+    color: #f5f7f5;
+}
+
+.dashboard-dark [data-agency-show] [class~="bg-[#f1f6f4]"] {
+    background-color: #173042;
+}
+
+.dashboard-dark [data-agency-show] #reviews article {
+    border-color: #31515d;
+}
+
+.dashboard-dark [data-agency-show] #reviews [class~="text-[#173042]"] {
+    color: #f5f7f5;
+}
+
+.dashboard-dark [data-agency-show] #reviews [class~="text-[#607985]"] {
+    color: #b4c3c5;
+}
+
+.dashboard-dark [data-live-reviews] {
+    border-color: #31515d;
+}
+
+.dashboard-dark [data-live-reviews] .dashboard-panel {
+    background: #173042;
+    border-color: #31515d;
+}
+
+[data-agency-review-form] input:checked + span {
+    color: #e76f51;
+}
+
+.dashboard-dark [data-account-sidebar] nav a:hover {
+    background-color: #234552;
+    color: #f5f7f5;
+}
+
+.dashboard-dark [data-account-sidebar] [data-profile-trigger]:hover {
+    background-color: transparent;
+}
+
+.dashboard-dark .account-logout:hover {
+    border-color: #f29a83;
+    background-color: #4a2d2a;
+    color: #ffd9cf;
+}
+
+.dashboard-dark {
+    background: #102936;
+    color: #f5f7f5;
+}
+
+.dashboard-dark > aside,
+.dashboard-dark header {
+    background: #173042;
+    border-color: #31515d;
+}
+
+.dashboard-dark .dashboard-panel {
+    background: #173042;
+    border-color: #31515d;
+}
+
+.dashboard-dark [class~="text-[#173042]"] {
+    color: #f5f7f5;
+}
+
+.dashboard-dark [class~="text-[#607985]"] {
+    color: #b4c3c5;
+}
+
+.dashboard-dark [class~="border-[#e7eceb]"],
+.dashboard-dark [class~="border-[#e4e9e7]"],
+.dashboard-dark [class~="border-[#dbe3e5]"] {
+    border-color: #31515d;
+}
+
+.dashboard-dark main,
+.dashboard-dark section,
+.dashboard-dark article {
+    color: #f5f7f5;
+}
+
+.dashboard-dark input,
+.dashboard-dark textarea,
+.dashboard-dark select {
+    background-color: #102936;
+    border-color: #486873;
+    color: #f5f7f5;
+}
+
+.dashboard-dark input::placeholder,
+.dashboard-dark textarea::placeholder {
+    color: #9fb1b5;
+}
+
+.dashboard-dark [class~="text-[#9aadb2]"],
+.dashboard-dark [class~="text-[#8a9ba0]"] {
+    color: #9fb1b5;
+}
+
+.dashboard-dark .dashboard-panel,
+.dashboard-dark [data-profile-dropdown] {
+    background-color: #173042;
+}
+
+.dashboard-dark .dashboard-panel[class~="bg-transparent"] {
+    background-color: transparent;
+}
+
+.dashboard-dark [data-account-settings] > div > section {
+    background-color: #173042;
+    border-color: #31515d;
+}
+
+.dashboard-dark main {
+    background-color: #102936;
+}
+
+.dashboard-dark [data-discover-page] [data-verified-badge] {
+    background: #f5f7f5;
+    color: #173042;
+}
+
+.dashboard-dark [data-discover-page] [data-favorite-toggle] {
+    background-color: rgb(245 247 245 / 96%);
+    color: #173042;
+}
+
+.dashboard-dark [data-discover-page] [data-favorite-toggle]:hover {
+    background-color: #ffffff;
+    color: #c9573e;
+}
+
+.dashboard-dark [data-agency-show] [data-favorite-toggle] {
+    border-color: #486873;
+    background-color: #173042;
+    color: #f5f7f5;
+}
+
+.dashboard-dark [data-agency-show] [data-favorite-toggle][aria-pressed="true"] {
+    color: #f29a83;
+}
+
+.dashboard-dark [data-agency-show] [data-favorite-label] {
+    color: #f5f7f5;
+}
+
+.dashboard-dark [data-agency-show] [data-favorite-toggle]:hover {
+    border-color: #f29a83;
+    background-color: #234552;
+    color: #ffd9cf;
+}
+
+.dashboard-dark [data-saved-card] {
+    background: #173042;
+    border-color: #31515d;
+}
+
+.dashboard-dark [data-saved-card] h2 {
+    color: #f5f7f5;
+}
+
+.dashboard-dark [data-saved-card] [class~="bg-[#edf4f3]"] {
+    background: #234552;
+    color: #d5e1e0;
+}
+
+.dashboard-dark [data-saved-badge] {
+    background: #f5f7f5;
+    color: #173042;
+}
+
+@media (min-width: 1024px) {
+    .account-collapsed [data-account-sidebar] {
+        width: 5.5rem;
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+
+    .account-collapsed [data-account-main] {
+        padding-left: 5.5rem;
+    }
+
+    .account-collapsed [data-account-label] {
+        display: none;
+    }
+
+    .account-collapsed [data-account-brand] {
+        display: none;
+    }
+
+    .account-collapsed [data-account-expand] {
+        display: flex !important;
+    }
+
+    .account-collapsed [data-account-collapse] {
+        display: none;
+    }
+
+    .account-collapsed [data-account-sidebar] nav a {
+        justify-content: center;
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+
+    .account-collapsed [data-account-sidebar] nav a svg {
+        margin: 0;
+    }
+
+    .account-collapsed [data-account-sidebar] > div.mt-auto:not([data-profile-menu]) .account-logout {
+        justify-content: center;
+        border-color: transparent;
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+
+    .account-collapsed [data-account-sidebar] .account-logout [data-account-label] {
+        display: none;
+    }
+}
+
+@media (max-width: 767px) {
+    [data-account-main] header form[action*="account/discover"]:focus-within ~ div [data-account-theme],
+    [data-account-main] header form[action*="account/discover"]:focus-within ~ div > div:has(> [data-lang-button]) {
+        display: none;
+    }
+
+    [data-account-main] header form[action*="account/discover"] {
+        max-width: none;
+    }
+
+    [data-account-main] header form[action*="account/discover"]:focus-within {
+        max-width: none;
+    }
+}

@@ -11,12 +11,41 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class AuthController extends Controller
 {
+    public function updateProfilePhoto(Request $request): RedirectResponse
+    {
+        $request->validate(['profile_photo' => ['required', 'image', 'max:2048']]);
+        $user = $request->user();
+
+        if ($user->profile_photo_path) {
+            Storage::disk('public')->delete($user->profile_photo_path);
+        }
+
+        $user->update(['profile_photo_path' => $request->file('profile_photo')->store('profile-photos', 'public')]);
+
+        return back()->with('status', 'Profile photo updated.');
+    }
+
+    public function updateProfile(Request $request): RedirectResponse
+    {
+        $user = $request->user();
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:191', 'unique:users,email,'.$user->id],
+            'phone' => ['nullable', 'string', 'max:30'],
+        ]);
+
+        $user->update($data);
+
+        return back()->with('status', 'Profile information updated.');
+    }
+
     public function registerTraveler(Request $request): RedirectResponse
     {
         $data = $request->validate([
@@ -62,12 +91,23 @@ class AuthController extends Controller
             'terms.accepted' => 'You must accept the terms to create an account.',
         ]);
 
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => $data['password'],
-            'role' => UserRole::AGENCY_OWNER,
-        ]);
+        $user = DB::transaction(function () use ($data): User {
+            $user = User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => $data['password'],
+                'role' => UserRole::AGENCY_OWNER,
+            ]);
+
+            $user->agency()->create([
+                'company_name' => $data['agency_name'],
+                'description' => '',
+                'license_number' => '',
+                'email' => $data['email'],
+            ]);
+
+            return $user;
+        });
 
         Auth::login($user);
         $request->session()->regenerate();

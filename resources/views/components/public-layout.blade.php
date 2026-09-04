@@ -7,7 +7,7 @@
     <title>{{ $title ?? 'TravelConnect' }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="flex min-h-screen flex-col bg-[#fbfaf7] text-[#173042] antialiased">
+<body class="flex min-h-screen flex-col bg-[#fbfaf7] text-[#173042] antialiased {{ auth()->check() ? 'authenticated' : '' }}">
     <div id="page-loader" class="pointer-events-none fixed inset-0 z-[100] flex items-center justify-center bg-[#fbfaf7] opacity-0 transition-opacity duration-300" aria-live="polite" aria-label="{{ __('messages.loading_page') }}" role="status">
         <div class="flex flex-col items-center gap-5 text-center">
             <span class="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-white shadow-[0_12px_30px_rgba(23,48,66,0.08)]">

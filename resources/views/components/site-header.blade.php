@@ -21,7 +21,7 @@
         aria-label="Main navigation">
 
         {{-- LOGO --}}
-        <a href="{{ route('home') }}"
+        <a href="{{ auth()->check() ? route('dashboard', ['lang' => app()->getLocale()]) : route('home') }}"
             class="flex items-center gap-2.5 text-base font-semibold tracking-tight text-[#173042] sm:gap-3 sm:text-lg">
 
             <span
@@ -41,13 +41,19 @@
              DESKTOP NAVIGATION
         ====================================================== --}}
         <div class="hidden items-center gap-8 text-sm font-medium text-[#607985] md:flex">
+            @auth
+                <a href="{{ route('dashboard', ['lang' => app()->getLocale()]) }}" class="transition hover:text-[#e76f51]">{{ __('messages.overview') }}</a>
+                <a href="{{ route('account.discover', ['lang' => app()->getLocale()]) }}" class="transition hover:text-[#e76f51]">{{ __('messages.discover_agencies') }}</a>
+                <a href="{{ route('account.saved', ['lang' => app()->getLocale()]) }}" class="transition hover:text-[#e76f51]">{{ __('messages.saved_agencies') }}</a>
+                <a href="{{ route('account.activity', ['lang' => app()->getLocale()]) }}" class="transition hover:text-[#e76f51]">{{ __('messages.my_activity') }}</a>
+            @else
 
             {{-- HOME --}}
             <a href="{{ route('home') }}"
                 class="group relative flex items-center gap-2 py-2 transition hover:text-[#e76f51]
                 {{ request()->routeIs('home') ? 'text-[#e76f51]' : '' }}">
 
-                <span>{{ __('navigation.home') }}</span>
+                <span>{{ __('messages.home') }}</span>
 
                 <span
                     class="absolute inset-x-0 bottom-0 h-0.5 origin-left bg-[#e76f51] transition-transform
@@ -58,6 +64,7 @@
             </a>
 
 
+            @if (auth()->check())
             {{-- AGENCIES --}}
             <a href="{{ route('discover') }}"
                 class="group relative flex items-center gap-2 py-2 transition hover:text-[#e76f51]
@@ -65,7 +72,7 @@
                     ? 'text-[#e76f51]'
                     : '' }}">
 
-                <span>{{ __('navigation.agencies') }}</span>
+                <span>{{ __('messages.agencies') }}</span>
 
                 <span
                     class="absolute inset-x-0 bottom-0 h-0.5 origin-left bg-[#e76f51] transition-transform
@@ -76,6 +83,8 @@
             </a>
 
 
+            @endif
+
             {{-- ABOUT --}}
             <div class="group relative">
 
@@ -83,7 +92,7 @@
                     type="button"
                     class="flex items-center gap-2 py-2 transition hover:text-[#e76f51]">
 
-                    <span>{{ __('navigation.about') }}</span>
+                    <span>{{ __('messages.about') }}</span>
 
                     <i
                         class="fa-solid fa-chevron-down text-[9px] transition-transform duration-200 group-hover:rotate-180"
@@ -102,7 +111,7 @@
                             <i class="fa-regular fa-circle-question text-sm"></i>
                         </span>-->
 
-                        <span>{{ __('navigation.how_it_works') }}</span>
+                        <span>{{ __('messages.how_it_works') }}</span>
                     </a>
 
                     <a href="{{ route('for-agencies') }}"
@@ -113,7 +122,7 @@
                             <i class="fa-solid fa-building text-sm"></i>
                         </span>-->
 
-                        <span>{{ __('navigation.for_agencies') }}</span>
+                        <span>{{ __('messages.for_agencies') }}</span>
                     </a>
                 </div>
             </div>
@@ -126,7 +135,7 @@
                     type="button"
                     class="flex items-center gap-2 py-2 transition hover:text-[#e76f51]">
 
-                    <span>{{ __('navigation.contact') }}</span>
+                    <span>{{ __('messages.contact') }}</span>
 
                     <i
                         class="fa-solid fa-chevron-down text-[9px] transition-transform duration-200 group-hover:rotate-180"
@@ -137,7 +146,7 @@
                 <div
                     class="invisible absolute left-1/2 top-full z-40 w-52 -translate-x-1/2 translate-y-2 rounded-xl border border-[#dbe3e5] bg-white p-2 opacity-0 shadow-[0_14px_30px_rgba(23,48,66,.12)] transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
 
-                    <a href="mailto:hello@travelconnect.test"
+                    <a href="{{ route('email-us', ['lang' => app()->getLocale()]) }}"
                         class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-[#607985] transition hover:bg-[#f1f6f4] hover:text-[#173042]">
 
                         <!--<span
@@ -145,10 +154,10 @@
                             <i class="fa-regular fa-envelope text-sm"></i>
                         </span>-->
 
-                        <span>{{ __('navigation.email_us') }}</span>
+                        <span>{{ __('messages.email_us') }}</span>
                     </a>
 
-                    <a href="{{ route('for-agencies') }}#resources"
+                    <a href="{{ route('agency-resources', ['lang' => app()->getLocale()]) }}"
                         class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-[#607985] transition hover:bg-[#f1f6f4] hover:text-[#173042]">
 
                         <!--<span
@@ -156,11 +165,12 @@
                             <i class="fa-solid fa-book-open text-sm"></i>
                         </span>-->
 
-                        <span>{{ __('navigation.agency_resources') }}</span>
+                        <span>{{ __('messages.agency_resources') }}</span>
                     </a>
                 </div>
             </div>
 
+            @endauth
         </div>
 
 
@@ -208,21 +218,14 @@
             </div>
 
 
-            {{-- LOGIN --}}
-            <a
-                href="{{ route('login', ['lang' => app()->getLocale()]) }}"
-                data-loading-link
-                class="hidden px-3 py-2 text-sm font-medium text-[#607985] transition hover:text-[#173042] sm:block">
-                {{ __('navigation.login') }}
-            </a>
-
-
-            {{-- REGISTER --}}
-            <a
-                href="{{ route('register', ['lang' => app()->getLocale()]) }}"
-                class="hidden rounded-full bg-[#173042] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#26495d] sm:inline-flex">
-                <span>{{ __('navigation.create_account') }}</span>
-            </a>
+            @guest
+                <a href="{{ route('login', ['lang' => app()->getLocale()]) }}" data-loading-link class="hidden px-3 py-2 text-sm font-medium text-[#607985] transition hover:text-[#173042] sm:block">{{ __('messages.login') }}</a>
+                <a href="{{ route('register', ['lang' => app()->getLocale()]) }}" class="hidden rounded-full bg-[#173042] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#26495d] sm:inline-flex"><span>{{ __('messages.create_account') }}</span></a>
+            @else
+                <a href="{{ route('settings', ['lang' => app()->getLocale()]) }}" class="hidden px-3 py-2 text-sm font-medium text-[#607985] transition hover:text-[#173042] sm:block">{{ __('messages.settings') }}</a>
+                <form action="{{ route('logout') }}" method="POST" class="hidden sm:block">@csrf<button type="submit" class="px-3 py-2 text-sm font-semibold text-[#607985] transition hover:text-[#e76f51]">{{ __('messages.logout') }}</button></form>
+                <a href="{{ route('settings', ['lang' => app()->getLocale()]) }}" class="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-[#173042] text-sm font-bold text-white" aria-label="{{ __('messages.settings') }}">@if (auth()->user()->profile_photo_path)<img src="{{ asset('storage/'.auth()->user()->profile_photo_path) }}" alt="{{ auth()->user()->name }}" class="h-full w-full object-cover">@else{{ str(auth()->user()->name)->substr(0, 1)->upper() }}@endif</a>
+            @endguest
 
 
             {{-- MOBILE MENU BUTTON --}}
@@ -233,12 +236,11 @@
                 aria-controls="mobile-menu"
                 class="group flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#dbe3e5] bg-white text-[#173042] shadow-sm transition hover:border-[#173042] hover:bg-[#f8faf9] sm:h-10 sm:w-10 md:hidden">
 
-<span class="sr-only">{{ __('navigation.open_navigation') }}</span>
+<span class="sr-only">{{ __('messages.open_navigation') }}</span>
 
-                <i
-                    class="fa-solid fa-bars text-sm transition-transform duration-200 group-hover:scale-110 sm:text-base"
-                    aria-hidden="true">
-                </i>
+                <svg data-menu-icon viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4 transition-transform duration-200 group-hover:scale-110 sm:h-5 sm:w-5" aria-hidden="true">
+                    <path d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
             </button>
 
         </div>
@@ -272,7 +274,7 @@
                 class="flex items-center justify-between border-b border-[#e7eceb] px-4 py-4">
 
                 <a
-                    href="{{ route('home') }}"
+                    href="{{ auth()->check() ? route('dashboard', ['lang' => app()->getLocale()]) : route('home') }}"
                     class="flex items-center gap-2.5">
 
                     <span
@@ -297,10 +299,9 @@
                     aria-label="Close navigation"
                     class="group flex h-9 w-9 items-center justify-center rounded-lg border border-[#dbe3e5] bg-white text-[#607985] transition hover:border-[#e76f51] hover:bg-[#fff7f4] hover:text-[#e76f51]">
 
-                    <i
-                        class="fa-solid fa-xmark text-base transition-transform duration-200 group-hover:rotate-90"
-                        aria-hidden="true">
-                    </i>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-5 w-5 transition-transform duration-200 group-hover:rotate-90" aria-hidden="true">
+                        <path d="m6 6 12 12M18 6 6 18"/>
+                    </svg>
                 </button>
 
             </div>
@@ -312,14 +313,27 @@
             <div class="flex-1 px-4 py-4">
 
 
+                @guest
                 {{-- NAVIGATION LABEL --}}
                 <div class="mb-2 px-2.5">
                     <p class="text-[9px] font-bold uppercase tracking-[0.18em] text-[#9aabad]">
-                        {{ __('navigation.navigation') }}
+                        {{ __('messages.navigation') }}
                     </p>
                 </div>
+                @endguest
+
+                @auth
+                <div class="mb-2 px-2.5"><p class="text-[9px] font-bold uppercase tracking-[0.18em] text-[#9aadb2]">{{ __('messages.workspace') }}</p></div>
+                <div class="space-y-0.5">
+                    <a href="{{ route('dashboard', ['lang' => app()->getLocale()]) }}" class="group flex items-center gap-2.5 rounded-lg bg-[#f1f6f4] px-2.5 py-2.5 text-[#e76f51]"><span class="flex h-8 w-8 items-center justify-center rounded-lg bg-white shadow-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-4 w-4" aria-hidden="true"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg></span><span class="text-[13px] font-semibold">{{ __('messages.overview') }}</span></a>
+                    <a href="{{ route('account.discover', ['lang' => app()->getLocale()]) }}" class="group flex items-center gap-2.5 rounded-lg px-2.5 py-2.5 text-[#526b76] hover:bg-[#f7f9f8] hover:text-[#173042]"><span class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#f4f7f6]"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-4 w-4" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg></span><span class="text-[13px] font-semibold">{{ __('messages.discover_agencies') }}</span></a>
+                    <a href="{{ route('account.saved', ['lang' => app()->getLocale()]) }}" class="group flex items-center gap-2.5 rounded-lg px-2.5 py-2.5 text-[#526b76] hover:bg-[#f7f9f8] hover:text-[#173042]"><span class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#f4f7f6]"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-4 w-4" aria-hidden="true"><path d="M6 4h12v16l-6-3-6 3V4Z"/></svg></span><span class="text-[13px] font-semibold">{{ __('messages.saved_agencies') }}</span></a>
+                    <a href="{{ route('settings', ['lang' => app()->getLocale()]) }}" class="group flex items-center gap-2.5 rounded-lg px-2.5 py-2.5 text-[#526b76] hover:bg-[#f7f9f8] hover:text-[#173042]"><span class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#f4f7f6]"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-4 w-4" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/><circle cx="12" cy="12" r="3"/></svg></span><span class="text-[13px] font-semibold">{{ __('messages.settings') }}</span></a>
+                </div>
+                @endauth
 
 
+                @guest
                 {{-- NAVIGATION LINKS --}}
                 <div class="space-y-0.5">
 
@@ -338,11 +352,11 @@
                                 ? 'bg-white text-[#e76f51] shadow-sm'
                                 : 'bg-[#f4f7f6] text-[#607985] group-hover:bg-white group-hover:text-[#173042] group-hover:shadow-sm' }}">
 
-                            <i class="fa-solid fa-house text-xs" aria-hidden="true"></i>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-4 w-4" aria-hidden="true"><path d="m3 11 9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-9Z"/></svg>
                         </span>
 
                         <span class="flex-1 text-[13px] font-semibold">
-                            {{ __('navigation.home') }}
+                            {{ __('messages.home') }}
                         </span>
 
                         @if (request()->routeIs('home'))
@@ -352,6 +366,7 @@
                     </a>
 
 
+                    @if (auth()->check())
                     {{-- AGENCIES --}}
                     <a
                         href="{{ route('discover') }}"
@@ -366,11 +381,11 @@
                                 ? 'bg-white text-[#e76f51] shadow-sm'
                                 : 'bg-[#f4f7f6] text-[#607985] group-hover:bg-white group-hover:text-[#173042] group-hover:shadow-sm' }}">
 
-                            <i class="fa-solid fa-compass text-xs" aria-hidden="true"></i>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-4 w-4" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2.2 4.8-4.8 2.2 2.2-4.8 4.8-2.2Z"/></svg>
                         </span>
 
                         <span class="flex-1 text-[13px] font-semibold">
-                            {{ __('navigation.agency_directory') }}
+                            {{ __('messages.agency_directory') }}
                         </span>
 
                         @if (request()->routeIs('discover') || request()->routeIs('agency.show'))
@@ -379,6 +394,8 @@
 
                     </a>
 
+
+                    @endif
 
                     {{-- ABOUT --}}
                     <details class="group">
@@ -389,18 +406,15 @@
                             <span
                                 class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#f4f7f6] text-[#607985] transition group-open:bg-[#173042] group-open:text-white">
 
-                                <i class="fa-solid fa-circle-info text-xs" aria-hidden="true"></i>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-4 w-4" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
 
                             </span>
 
                             <span class="flex-1 text-[13px] font-semibold">
-                                {{ __('navigation.about') }}
+                                {{ __('messages.about') }}
                             </span>
 
-                            <i
-                                class="fa-solid fa-chevron-down text-[9px] text-[#9aabad] transition-transform duration-200 group-open:rotate-180"
-                                aria-hidden="true">
-                            </i>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-3 w-3 text-[#9aabad] transition-transform duration-200 group-open:rotate-180" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
 
                         </summary>
 
@@ -411,9 +425,9 @@
                                 href="{{ route('how-it-works') }}"
                                 class="flex items-center gap-2 rounded-md px-2.5 py-2 text-xs text-[#607985] transition hover:bg-[#f1f6f4] hover:text-[#173042]">
 
-                                <i class="fa-regular fa-circle-question w-3 text-center"></i>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-3.5 w-3.5" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.3 2.3 0 1 1 3.8 1.7c-1 .8-1.6 1.2-1.6 2.3M12 16h.01"/></svg>
 
-                                <span>{{ __('navigation.how_it_works') }}</span>
+                                <span>{{ __('messages.how_it_works') }}</span>
 
                             </a>
 
@@ -421,9 +435,9 @@
                                 href="{{ route('for-agencies') }}"
                                 class="flex items-center gap-2 rounded-md px-2.5 py-2 text-xs text-[#607985] transition hover:bg-[#f1f6f4] hover:text-[#173042]">
 
-                                <i class="fa-solid fa-building w-3 text-center"></i>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-3.5 w-3.5" aria-hidden="true"><path d="M4 20V6l8-3 8 3v14M8 20v-4h8v4M8 9h2M14 9h2M8 12h2M14 12h2"/></svg>
 
-                                <span>{{ __('navigation.for_agencies') }}</span>
+                                <span>{{ __('messages.for_agencies') }}</span>
 
                             </a>
 
@@ -441,18 +455,15 @@
                             <span
                                 class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#f4f7f6] text-[#607985] transition group-open:bg-[#173042] group-open:text-white">
 
-                                <i class="fa-regular fa-comments text-xs" aria-hidden="true"></i>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-4 w-4" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-8 7.5 8.8 8.8 0 0 1-3.2-.6L4 20l1.5-3.7A7.4 7.4 0 0 1 4 11.5 7.5 7.5 0 0 1 12 4a7.5 7.5 0 0 1 8 7.5Z"/></svg>
 
                             </span>
 
                             <span class="flex-1 text-[13px] font-semibold">
-                                {{ __('navigation.contact') }}
+                                {{ __('messages.contact') }}
                             </span>
 
-                            <i
-                                class="fa-solid fa-chevron-down text-[9px] text-[#9aabad] transition-transform duration-200 group-open:rotate-180"
-                                aria-hidden="true">
-                            </i>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-3 w-3 text-[#9aabad] transition-transform duration-200 group-open:rotate-180" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
 
                         </summary>
 
@@ -460,22 +471,22 @@
                         <div class="ml-10 mt-0.5 space-y-0.5 px-5 pl-2.5">
 
                             <a
-                                href="mailto:hello@travelconnect.test"
+                                href="{{ route('email-us', ['lang' => app()->getLocale()]) }}"
                                 class="flex items-center gap-2 rounded-md px-2.5 py-2 text-xs text-[#607985] transition hover:bg-[#f1f6f4] hover:text-[#173042]">
 
-                                <i class="fa-regular fa-envelope w-3 text-center"></i>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-3.5 w-3.5" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
 
-                                <span>{{ __('navigation.email_us') }}</span>
+                                <span>{{ __('messages.email_us') }}</span>
 
                             </a>
 
                             <a
-                                href="{{ route('for-agencies') }}#resources"
+                                href="{{ route('agency-resources', ['lang' => app()->getLocale()]) }}"
                                 class="flex items-center gap-2 rounded-md px-2.5 py-2 text-xs text-[#607985] transition hover:bg-[#f1f6f4] hover:text-[#173042]">
 
-                                <i class="fa-solid fa-book-open w-3 text-center"></i>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-3.5 w-3.5" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H12v17H6.5A2.5 2.5 0 0 0 4 22V5.5ZM20 5.5A2.5 2.5 0 0 0 17.5 3H12v17h5.5A2.5 2.5 0 0 1 20 22V5.5Z"/></svg>
 
-                                <span>{{ __('navigation.agency_resources') }}</span>
+                                <span>{{ __('messages.agency_resources') }}</span>
 
                             </a>
 
@@ -484,6 +495,7 @@
                     </details>
 
                 </div>
+                @endguest
 
 
                 {{-- =================================================
@@ -493,24 +505,24 @@
 
                     <div class="mb-2 px-2.5">
                         <p class="text-[9px] font-bold uppercase tracking-[0.18em] text-[#9aabad]">
-                            {{ __('navigation.account') }}
+                            {{ __('messages.account') }}
                         </p>
                     </div>
 
                     <a
-                        href="{{ route('login', ['lang' => app()->getLocale()]) }}"
+                        href="{{ auth()->check() ? route('settings', ['lang' => app()->getLocale()]) : route('login', ['lang' => app()->getLocale()]) }}"
                         data-loading-link
                         class="group flex items-center gap-2.5 rounded-lg px-2.5 py-2.5 text-[#526b76] transition hover:bg-[#f7f9f8] hover:text-[#173042]">
 
                         <span
                             class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#f4f7f6] text-[#607985] transition group-hover:bg-white group-hover:text-[#173042] group-hover:shadow-sm">
 
-                            <i class="fa-solid fa-arrow-right-to-bracket text-xs"></i>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-4 w-4" aria-hidden="true"><path d="M10 5H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h5M13 8l4 4-4 4M8 12h9"/></svg>
 
                         </span>
 
                         <span class="text-[13px] font-semibold">
-                            {{ __('navigation.login') }}
+                            {{ auth()->check() ? __('messages.settings') : __('messages.login') }}
                         </span>
 
                     </a>
@@ -525,7 +537,7 @@
 
                     <div class="mb-2 px-2.5">
                         <p class="text-[9px] font-bold uppercase tracking-[0.18em] text-[#9aabad]">
-                            {{ __('navigation.language') }}
+                            {{ __('messages.language') }}
                         </p>
                     </div>
 
@@ -534,6 +546,8 @@
 
                         <a
                             href="{{ request()->fullUrlWithQuery(['lang' => 'en']) }}"
+                            data-lang-button
+                            data-lang="en"
                             class="flex items-center justify-center gap-2 rounded-lg border px-3 py-2.5 transition
                             {{ request('lang', 'en') === 'en'
                                 ? 'border-[#173042] bg-[#173042] text-white shadow-sm'
@@ -542,7 +556,7 @@
                             <span class="fi fi-gb rounded-sm"></span>
 
                             <span class="text-xs font-semibold">
-                                {{ __('navigation.english') }}
+                                {{ __('messages.english') }}
                             </span>
 
                         </a>
@@ -550,6 +564,8 @@
 
                         <a
                             href="{{ request()->fullUrlWithQuery(['lang' => 'fr']) }}"
+                            data-lang-button
+                            data-lang="fr"
                             class="flex items-center justify-center gap-2 rounded-lg border px-3 py-2.5 transition
                             {{ request('lang') === 'fr'
                                 ? 'border-[#173042] bg-[#173042] text-white shadow-sm'
@@ -558,7 +574,7 @@
                             <span class="fi fi-fr rounded-sm"></span>
 
                             <span class="text-xs font-semibold">
-                                {{ __('navigation.french') }}
+                                {{ __('messages.french') }}
                             </span>
 
                         </a>
@@ -570,9 +586,10 @@
             </div>
 
 
-            {{-- =================================================
-                 BOTTOM CTA
-            ================================================== --}}
+              @guest
+              {{-- =================================================
+                  BOTTOM CTA
+              ================================================== --}}
             <div
                 class="border-t border-[#e7eceb] bg-[#fbfcfb] p-4">
 
@@ -581,18 +598,18 @@
                     <span
                         class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#fff1ed] text-[#e76f51]">
 
-                        <i class="fa-solid fa-building text-xs"></i>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-4 w-4" aria-hidden="true"><path d="M4 20V6l8-3 8 3v14M8 20v-4h8v4M8 9h2M14 9h2M8 12h2M14 12h2"/></svg>
 
                     </span>
 
                     <div>
 
                         <p class="text-xs font-bold text-[#173042]">
-                            {{ __('navigation.are_you_an_agency') }}
+                            {{ __('messages.are_you_an_agency') }}
                         </p>
 
                         <p class="mt-0.5 text-[10px] text-[#8a9ba0]">
-                            {{ __('navigation.join_travelconnect') }}
+                            {{ __('messages.join_travelconnect') }}
                         </p>
 
                     </div>
@@ -604,13 +621,16 @@
                     href="{{ route('register', ['lang' => app()->getLocale()]) }}"
                     class="flex w-full items-center justify-center gap-2 rounded-lg bg-[#e76f51] px-3 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-[#d95f42] hover:shadow-md">
 
-                    <span>{{ __('navigation.register_your_agency') }}</span>
+                    <span>{{ __('messages.register_your_agency') }}</span>
 
-                    <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-3.5 w-3.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
 
                 </a>
 
             </div>
+            @else
+            <div class="border-t border-[#e7eceb] p-4"><form action="{{ route('logout') }}" method="POST">@csrf<button type="submit" class="flex w-full items-center justify-center gap-2 rounded-lg border border-[#dbe3e5] px-3 py-2.5 text-xs font-bold text-[#607985] hover:border-[#e76f51] hover:text-[#e76f51]"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-4 w-4" aria-hidden="true"><path d="M10 5H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h5M13 8l4 4-4 4M8 12h9"/></svg>{{ __('messages.logout') }}</button></form></div>
+            @endguest
 
         </div>
 

@@ -1,8 +1,7 @@
-<x-public-layout title="{{ __('messages.travel_agency_directory') }} | TravelConnect" description="{{ __('messages.compare_verified_travel_experts') }}">
-    <x-site-header />
+<x-account-shell title="{{ __('messages.travel_agency_directory') }} | TravelConnect">
 
-    <main>
-        <section class="border-b border-[#dbe3e5] bg-[#f1f6f4]">
+    <main data-discover-page>
+        <section data-discover-hero class="border-b border-[#dbe3e5] bg-[#f1f6f4]">
             <div class="mx-auto max-w-7xl px-6 pb-12 pt-14 lg:px-8 lg:pb-16 lg:pt-20">
                 <div class="max-w-3xl">
                     <p class="text-xs font-bold uppercase tracking-[.2em] text-[#e76f51]">{{ __('messages.travel_agency_directory') }}</p>
@@ -10,7 +9,7 @@
                     <p class="mt-5 max-w-2xl text-base leading-7 text-[#607985]">{{ __('messages.compare_verified_travel_experts') }}</p>
                 </div>
 
-                <form action="{{ route('discover') }}" method="GET" class="mt-10 border border-[#173042] bg-white p-3 shadow-[0_12px_30px_rgba(23,48,66,.08)]">
+                <form data-discover-search action="{{ route('discover') }}" method="GET" class="mt-10 border border-[#173042] bg-white p-3 shadow-[0_12px_30px_rgba(23,48,66,.08)]">
                     <div class="grid gap-3 lg:grid-cols-[1fr_auto]">
                         <label class="relative block">
                             <span class="sr-only">{{ __('messages.search_agencies_or_destinations') }}</span>
@@ -28,17 +27,11 @@
                 <div><p class="text-sm font-semibold text-[#173042]">{{ __('messages.featured_agencies') }}</p><p class="mt-1 text-sm text-[#607985]">{{ __('messages.considered_selection') }}</p></div>
             </div>
 
-            <div class="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-                <x-agency-card name="Atlas Horizon Voyages" image="https://images.unsplash.com/photo-1530789253388-582c481c54b0?auto=format&fit=crop&w=900&q=85" alt="Mountain lake destination" description="Tailor-made adventures across Europe and beyond, planned by a team that knows the routes personally." country="France" service="Adventure travel" rating="4.9" />
-                <x-agency-card name="Lumiere Routes" image="https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=900&q=85" alt="Tropical island coastline" description="Slow travel and beautiful escapes, thoughtfully planned around the details that make a journey memorable." country="Portugal" service="Luxury escapes" rating="4.8" />
-                <x-agency-card name="Northstar Escapes" image="https://images.unsplash.com/photo-1522083165195-3424ed129620?auto=format&fit=crop&w=900&q=85" alt="Traveler looking over a scenic valley" description="Family journeys built around practical planning, local insight, and the moments that matter." country="Canada" service="Family holidays" rating="4.9" />
-            </div>
+            <div class="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">@forelse ($agencies as $agency)<x-agency-card :name="$agency->company_name" :saved="in_array($agency->company_name, $savedAgencyNames, true)" :countries="$agency->countries->pluck('name')->all()" image="https://images.unsplash.com/photo-1530789253388-582c481c54b0?auto=format&fit=crop&w=900&q=85" :alt="$agency->company_name" :description="$agency->company_name === 'Blue Fern Expeditions' ? 'Expeditions across the South Pacific, planned with local expertise and a spirit of discovery.' : $agency->description" :service="$agency->services->first()?->name" :rating="$agency->published_rating ? number_format($agency->published_rating, 1) : '—'" />@empty<div class="dashboard-panel col-span-full border-dashed border-[#cbd9d8] bg-transparent p-12 text-center"><p class="font-bold">{{ __('messages.no_agencies_found') }}</p><p class="mt-2 text-sm text-[#607985]">{{ __('messages.try_another_search') }}</p></div>@endforelse</div>
 
             <div class="mt-12 border border-dashed border-[#b9c9c9] bg-[#fbfaf7] px-6 py-10 text-center"><p class="text-sm font-bold text-[#173042]">{{ __('messages.looking_for_something_specific') }}</p><p class="mt-2 text-sm text-[#607985]">{{ __('messages.use_search_above') }}</p></div>
         </section>
 
-        <section class="border-t border-[#e7eceb] bg-white"><div class="mx-auto flex max-w-7xl flex-col justify-between gap-5 px-6 py-12 sm:flex-row sm:items-center lg:px-8"><div><p class="text-sm font-bold text-[#173042]">{{ __('messages.for_travel_professionals') }}</p><p class="mt-1 text-sm text-[#607985]">{{ __('messages.build_a_profile') }}</p></div><a href="{{ route('register.agency') }}" class="inline-flex w-fit items-center gap-3 rounded-lg bg-[#173042] px-5 py-3 text-sm font-bold text-white transition hover:bg-[#26495d]">{{ __('messages.register_your_agency') }} <span aria-hidden="true">&rarr;</span></a></div></section>
     </main>
 
-    <x-site-footer />
-</x-public-layout>
+</x-account-shell>
