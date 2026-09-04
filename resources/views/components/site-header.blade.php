@@ -5,9 +5,6 @@
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.3.2/css/flag-icons.min.css">
 
-    {{-- Font Awesome --}}
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 
 <header
@@ -94,10 +91,7 @@
 
                     <span>{{ __('messages.about') }}</span>
 
-                    <i
-                        class="fa-solid fa-chevron-down text-[9px] transition-transform duration-200 group-hover:rotate-180"
-                        aria-hidden="true">
-                    </i>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-3 w-3 transition-transform duration-200 group-hover:rotate-180" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
                 </button>
 
                 <div
@@ -137,10 +131,7 @@
 
                     <span>{{ __('messages.contact') }}</span>
 
-                    <i
-                        class="fa-solid fa-chevron-down text-[9px] transition-transform duration-200 group-hover:rotate-180"
-                        aria-hidden="true">
-                    </i>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-3 w-3 transition-transform duration-200 group-hover:rotate-180" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
                 </button>
 
                 <div
@@ -179,6 +170,7 @@
         ====================================================== --}}
         <div class="flex items-center gap-1.5 sm:gap-3">
 
+            @auth
             {{-- LANGUAGE --}}
             <div
                 class="hidden items-center rounded-xl border border-[#dbe3e5] bg-white p-1 sm:flex"
@@ -216,6 +208,7 @@
 
                 <div id="google_translate_element" class="hidden"></div>
             </div>
+            @endauth
 
 
             @guest
