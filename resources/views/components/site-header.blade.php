@@ -170,7 +170,6 @@
         ====================================================== --}}
         <div class="flex items-center gap-1.5 sm:gap-3">
 
-            @auth
             {{-- LANGUAGE --}}
             <div
                 class="hidden items-center rounded-xl border border-[#dbe3e5] bg-white p-1 sm:flex"
@@ -208,7 +207,6 @@
 
                 <div id="google_translate_element" class="hidden"></div>
             </div>
-            @endauth
 
 
             @guest
